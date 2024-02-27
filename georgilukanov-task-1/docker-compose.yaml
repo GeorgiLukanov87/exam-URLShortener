@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  mongodb:
+    networks:
+      - shoppinglist_network
+    container_name: mongodb
+    volumes:
+      - data:/data/db
+      - node_modules:/node_modules
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=max
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    image: mongo
+
+  backend:
+    ports:
+      - 80:80
+    networks:
+      - shoppinglist_network
+    volumes:
+      - logs:/logs
+    image: georgilukanov87/shoppinglist_backend
+
+  frontend:
+    container_name: frontend
+    networks:
+      - shoppinglist_network
+    ports:
+      - 3000:3000
+    volumes:
+      - .\frontend\src:/src
+    image: georgilukanov87/shoppinglist_frontend
+
+networks:
+  shoppinglist_network:
+
+
+volumes:
+  data:
+  logs:
+  node_modules:
